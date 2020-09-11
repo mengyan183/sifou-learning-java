@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 
 /**
@@ -19,12 +20,20 @@ import java.util.logging.Logger;
  */
 public class FunctionMain {
 
+    class CustomMap<K, V extends Serializable> {
+        public void saveData(BiFunction<? super K,K,K> biFunction) {
+        }
+    }
+
     /**
      * @param <S> 来源类型泛型
      * @param <T> 目标类型泛型
      */
     interface Convert<S, T extends Serializable> {
         T convert(S s);
+    }
+
+    interface StringConvert<T extends Serializable> extends Convert<String, T> {
     }
 
 
