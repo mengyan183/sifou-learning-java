@@ -3,6 +3,7 @@
  */
 package com.xingguo.first;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
@@ -31,12 +32,16 @@ public class StringDemo {
         // 将当前value2对象中的value字段修改为 指定的数据
         declaredValueField.set(value2, afterValueArr);
         System.out.println(value2);
+        printLn((Serializable) value2);
+
+        ExtendableString extendableString = new ExtendableString(afterValueArr);
+        extendableString.printLn((Serializable) value2);
     }
 
     // 对于 String 类型我们了解 其是不可变的
     // 对于String 为什么要设置为不可变的
     // 如果String设置为可继承,则表示当前类中所有非final修饰的非private的方法都可以被继承和重写,因此对于不想变的公共方法只能全部都添加final修饰
-    class ExtendableString {
+    static class ExtendableString {
         private final byte[] value;
         private int hash;
         private boolean hashIsZero;
@@ -55,5 +60,22 @@ public class StringDemo {
             int h = hash;
             return h;
         }
+
+        public void printLn(CharSequence charSequence) {
+            System.out.println("charSequence:" + charSequence);
+        }
+
+        public void printLn(Serializable serializable) {
+            System.out.println("serializable:" + serializable);
+        }
+    }
+
+
+    private static void printLn(Serializable serializable){
+        System.out.println(serializable);
+    }
+
+    private static void printLn(CharSequence charSequence){
+        System.out.println(charSequence);
     }
 }
