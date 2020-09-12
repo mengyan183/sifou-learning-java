@@ -98,10 +98,17 @@ public class InterfaceDemo {
         a.printLn((CharSequence) customString);
 
         printLn((B) new MultiInterface());
+        B.save();
     }
 
     interface B {
-
+        // 支持静态方法实现
+        static void save() {
+            System.out.println("interface static");
+        }
+        default void printLn(){
+            System.out.println(this);
+        }
     }
 
     interface C {
@@ -109,7 +116,8 @@ public class InterfaceDemo {
     }
 
     static class MultiInterface implements B, C {
-
+        // 静态成员本身就不具备传递性
+        public static String A = "MultiInterface";
     }
 
     private static void printLn(B b) {
@@ -118,5 +126,10 @@ public class InterfaceDemo {
 
     private static void printLn(C c) {
         System.out.println("C:" + c);
+    }
+
+    static class ExtendMultiInterface extends MultiInterface {
+        public ExtendMultiInterface() {
+        }
     }
 }
