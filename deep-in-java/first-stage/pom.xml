@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+    <name>第一阶段</name>
     <modules>
         <module>oop</module>
     </modules>
