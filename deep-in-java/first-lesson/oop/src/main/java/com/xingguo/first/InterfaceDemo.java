@@ -27,7 +27,7 @@ public class InterfaceDemo {
             return CONSTANT_VALUE;
         }
 
-        void println(CharSequence charSequence);
+        void printLn(CharSequence charSequence);
 
         void printLn(Serializable serializable);
 
@@ -46,7 +46,7 @@ public class InterfaceDemo {
 
     public static class AImpl extends AbstractA {
         @Override
-        public void println(CharSequence charSequence) {
+        public void printLn(CharSequence charSequence) {
             System.out.println("charSequence:" + charSequence);
         }
 
@@ -92,9 +92,10 @@ public class InterfaceDemo {
         int i = a.commonFunc();
         System.out.println(i);
         String v = "1";
-        a.printLn(v); // 打印结果都是 serializable:1 ; 且不需要使用类型强制转换
+        // 对于重载方法虽然参数类型是不同的,但对于接口类型的参数,如果一个实现类同时实现了多个接口,则要求在调用重载方法时必须进行强制类型转换来指定要使用的具体方法
+        a.printLn((Serializable) v); // 打印结果都是 serializable:1 ; 且不需要使用类型强制转换
         CustomString customString = new CustomString("1");
-        a.printLn(customString);
+        a.printLn((CharSequence) customString);
 
         printLn((B) new MultiInterface());
     }
