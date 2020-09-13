@@ -3,10 +3,19 @@
  */
 package com.xingguo.first.generic;
 
-import java.awt.*;
+import org.springframework.core.ResolvableType;
+import org.springframework.util.ClassUtils;
+
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * GenericParamTypeDemo
@@ -17,13 +26,15 @@ import java.util.Collection;
  * @since
  */
 public class GenericParamTypeDemo {
+    //需要通过反射才能获取到当前成员变量的泛型
+    public static List<Map<String, Integer>> mapList = new ArrayList<>();
 
     public static void main(String[] args) {
         // 这里限定了当前泛型为String
         Container<String> stringContainer = new Container<>("1");
         // 对于后面实例化对象时由于未指定泛型的具体类型,因此在操作时实际限制为Object类型
         // 因此运行时也不会报错;(当未限定泛型上限时)
-        Container<Integer> integerContainer = new Container("1");
+        Container<Integer> integerContainer = new Container("1");// 对于其实例化由于未显式绑定泛型参数类型,因此编译为字节码之后实际是 GenericParamTypeDemo.Container integerContainer = new GenericParamTypeDemo.Container("1"); 默认的"Object"类型
         // 但在运行时就会抛出错误,对于integerContainer实际存储的类型为String类型,而get方法返回的是Integer类型
         // 当进行强制类型转换时,会抛出类型转换错误
         try {
@@ -46,14 +57,46 @@ public class GenericParamTypeDemo {
         add(new ArrayList<>(), 1);
         add(new ArrayList<>(), "string");
 
-        castQuestion();
+        try {
+            castQuestion();
+        }catch (ClassCastException classCastException){
 
+        }
+        try {
+            getGenericType();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
+
+    // 获取泛型中的类型
+    public static void getGenericType() throws NoSuchFieldException {
+        //javap  -v GenericParamTypeDemo.class
+        // 对于局部变量的泛型,可以通过编译后字节码也是可以得到的 // LocalVariableTypeTable:
+        List<Map<String, String>> mapList = new ArrayList<>();
+        // 通过反射获取类中的成员变量
+        Field declaredField = GenericParamTypeDemo.class.getDeclaredField("mapList");
+        ResolvableType resolvableType = ResolvableType.forField(declaredField);
+        ResolvableType generic = resolvableType.getGeneric(0);
+        System.out.println(generic);
+        // 获取类上的泛型定义
+        Container<String> stringContainer = new Container<>("1");
+        // 这里只能获取到该类的泛型参数定义,而不能获取到泛型的具体类型
+        TypeVariable<? extends Class<? extends Container>>[] typeParameters = stringContainer.getClass().getTypeParameters();
+        Stream.of(typeParameters).forEach(System.out::println);
+
+//        ParameterizedType genericSuperclass = (ParameterizedType) stringContainer.getClass().getGenericSuperclass();
+//        Type[] actualTypeArguments = genericSuperclass.getActualTypeArguments();
+//        Stream.of(actualTypeArguments).forEach(System.out::println);
+    }
+
 
     public static void castQuestion() {
         // 在执行实例化操作时,实际已经隐式限定了当前对象的类型
         // 在执行具体操作时,虽然根据变量的限定符显式定义,但在实际使用中就会抛出错误
         Container<StringBuilder> stringContainer = new Container("1");
+        // 在字节码文件中实际会自动进行强制类型转换
+        // StringBuilder element = (StringBuilder)stringContainer.getElement();
         StringBuilder element = stringContainer.getElement();
         Container<Integer> integerContainer = new Container("1");
         Integer integerContainerElement = integerContainer.getElement();
