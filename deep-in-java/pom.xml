@@ -8,7 +8,7 @@
     <artifactId>deep-in-java</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>first-lesson</module>
+        <module>first-stage</module>
     </modules>
     <packaging>pom</packaging>
 
