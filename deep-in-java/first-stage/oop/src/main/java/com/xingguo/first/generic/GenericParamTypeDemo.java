@@ -51,6 +51,8 @@ public class GenericParamTypeDemo {
     }
 
     public static void castQuestion() {
+        // 在执行实例化操作时,实际已经隐式限定了当前对象的类型
+        // 在执行具体操作时,虽然根据变量的限定符显式定义,但在实际使用中就会抛出错误
         Container<StringBuilder> stringContainer = new Container("1");
         StringBuilder element = stringContainer.getElement();
         Container<Integer> integerContainer = new Container("1");
