@@ -3,6 +3,7 @@
  */
 package com.xingguo.first.generic;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,37 +23,50 @@ public class GenericParamTypeDemo {
         Container<String> stringContainer = new Container<>("1");
         // 对于后面实例化对象时由于未指定泛型的具体类型,因此在操作时实际限制为Object类型
         // 因此运行时也不会报错;(当未限定泛型上限时)
-//        Container<Integer> integerContainer = new Container("1");
-//        // 但在运行时就会抛出错误,对于integerContainer实际存储的类型为String类型,而get方法返回的是Integer类型
-//        // 当进行强制类型转换时,会抛出类型转换错误
-//        try {
-//            Integer element = integerContainer.getElement();
-//        }catch (ClassCastException c){
-//            System.out.println(c.getMessage());
-//        }
+        Container<Integer> integerContainer = new Container("1");
+        // 但在运行时就会抛出错误,对于integerContainer实际存储的类型为String类型,而get方法返回的是Integer类型
+        // 当进行强制类型转换时,会抛出类型转换错误
+        try {
+            Integer element = null;
+            Object o = integerContainer.getElement();// 这里的报错是由于将返回值String类型赋值给Integer类型时发生的错误
+            System.out.println(o.getClass().getTypeName());
+            // 对于 Integer element = integerContainer.getElement(); 实际是将一个实际类型为String的Object类型数据强制转换为Integer类型;因此会抛出类型转换异常
+        } catch (ClassCastException c) {
+            System.out.println(c.getMessage());
+        }
 
         // 当限定了类型的单一上限为 CharSequence 时
         // 由于String 和 StringBuffer 都是 CharSequence的子级,因此编译时不会报错
         Container<StringBuffer> stringBufferContainer = new Container("1");
-        Container<String> stringContainer1 = new Container("1");
         // 为什么这里可以正常输出?
-        // 原因为: 由于运行时类型擦除, 对于stringBufferContainer中实际都是Object类型
-        // 当在调用get方法使用时,实际进行了一下步骤 (StringBuffer)((CharSequence)((String)("1")))???
-        //TODO  存在疑问点: 从String类型如何转换为的StringBuffer类型???
-        System.out.println(stringBufferContainer.getElement());
+        // 原因为: 由于运行时类型擦除, 对于stringBufferContainer中实际都是Object类型,但隐藏的类型为String
+        // 当在调用get方法使用时,实际进行了一下步骤 ((Object)((String)("1"))).toString()
+        System.out.println(stringBufferContainer.getElement()); // 通过debug我们可以看到这里实际是调用的String中的toString方法, 虽然返回的结果为Object,但其实际类型为String,体现了多态
 
         add(new ArrayList<>(), 1);
         add(new ArrayList<>(), "string");
+
+        castQuestion();
+
+    }
+
+    public static void castQuestion() {
+        Container<StringBuilder> stringContainer = new Container("1");
+        StringBuilder element = stringContainer.getElement();
+        Container<Integer> integerContainer = new Container("1");
+        Integer integerContainerElement = integerContainer.getElement();
 
     }
 
     // 自定义内部容器类,类型为泛型
     // 单界限操作: E extends CharSequence,这里限定了泛型的类型只能为CharSequence的子级
-    public static class Container<E extends CharSequence> {
+    public static class Container<E extends Serializable> {
         private E element;
 
         public Container(E element) {
             this.element = element;
+            // 可以看到当前元素的实际类型
+            System.out.println(element.getClass().getTypeName());
         }
 
         // 方法
