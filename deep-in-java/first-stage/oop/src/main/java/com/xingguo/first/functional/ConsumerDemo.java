@@ -18,7 +18,15 @@ public class ConsumerDemo {
     public static void main(String[] args) {
         // 创建两个consumer
         Consumer<String> consumer = System.out::println;
-        Consumer<String> consumer1 = ConsumerDemo::printLn;
+        // 对于 lambda 中的:: 实际表达的是一段代码的引用;
+        // 例如以下代码表示consumer的accept方法中引用了 ConsumerDemo中的printLn方法
+//        Consumer<String> consumer1 = ConsumerDemo::printLn;
+        Consumer<String> consumer1 = new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                ConsumerDemo.printLn(s);
+            }
+        };
         // consumer通过andThen支持链式编程
         consumer.andThen(consumer1).accept("输出");
     }

@@ -20,7 +20,12 @@ public class SupplierDemo {
         Supplier<String> string = getString();
         System.out.println(string.get());
 
-        Callable<Long> callable = () -> getCurrentTimeMillis().get();
+        Callable<Long> callable = new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                return getCurrentTimeMillis().get();
+            }
+        };
         try {
             System.out.println(callable.call());
         } catch (Exception e) {
