@@ -24,6 +24,17 @@ public class StreamDemo {
         // 倒序
         System.out.println(sorted(Arrays.asList(1, 2, 3, 4, 5, 6),
                 (x, y) -> (x < y) ? 1 : ((x.equals(y)) ? 0 : -1)));
+
+        // 并发stream
+        parallelForEach(Arrays.asList(1, 2, 3, 4, 5, 6));
+    }
+
+    public static void printLnThread(Object o) {
+        System.out.println(Thread.currentThread().getName() + ":" + o.toString());
+    }
+
+    public static void parallelForEach(List<Integer> list) {
+        list.stream().parallel().forEach(StreamDemo::printLnThread);
     }
 
     public static List<Integer> sorted(List<Integer> list) {
