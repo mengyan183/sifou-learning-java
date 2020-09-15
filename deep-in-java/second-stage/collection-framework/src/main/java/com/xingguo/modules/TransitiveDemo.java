@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class TransitiveDemo {
     /**
-     * 可以看到在当前的启动命令中 存在 模块路径 以及 具体的jar包
+     * 可以看到在当前的启动命令中 存在 文件目录 以及 具体的jar包 ,这里代表的就是模块路径
      *
      * -p /Users/xingguo/sifou-learning-java/deep-in-java/second-stage/collection-framework/target/classes:
      * /Users/xingguo/.m2/repository/org/springframework/spring-context/5.2.8.RELEASE/spring-context-5.2.8.RELEASE.jar:
