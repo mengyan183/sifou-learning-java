@@ -11,6 +11,7 @@ module collection.framework { //定义当前模块的名称类似于maven的arti
     requires java.sql; // 在java.sql中的requires transitive 表示了依赖传递, 当引入 java.sql依赖后,会默认将java.sql中使用 requires transitive 的相关依赖也传递进来
     // 引入第三方未命名的
     requires spring.context;
+    requires spring.core;
     requires org.apache.commons.lang3; // 对于存在 Automatic-Module-Name 的maven 依赖 可以直接使用 META-INF下MANIFEST.MF中的Automatic-Module-Name 对应的数据进行依赖
     requires commons.collections; // 对于不存在Automatic-Module-Name 的maven依赖,只需要通过将 maven 的artifactId 中的 "-" 转换"." 使用requires 进行依赖
 
