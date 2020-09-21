@@ -42,14 +42,19 @@ public class InsertSort<T extends Comparable<T>> implements Sort<T> {
         for (int i = 1; i < length; i++) {
             // 对于compareValue一直等于 array[j+1]
             T compareValue = array[i];
-            for (int j = i - 1; j >= 0; j--) {
+            int j = i - 1;
+            for (; j >= 0; j--) {
                 // flag && array[j].compareTo(compareValue) == 1 (array[j] > compareValue) 升序
                 // !flag && array[j].compareTo(compareValue) == -1 (array[j] < compareValue) 降序
                 if ((flag && array[j].compareTo(compareValue) == 1) || (!flag && array[j].compareTo(compareValue) == -1)) {
                     array[j + 1] = array[j];
-                    array[j] = compareValue;
+//                    array[j] = compareValue;// 该交换操作实际是没有必要的
+                } else {
+                    break;
                 }
             }
+            // 可以在全部比较操作都执行结束后,在结束游标的后一位将当前比较的元素塞入数组中
+            array[j + 1] = compareValue;
         }
     }
 
