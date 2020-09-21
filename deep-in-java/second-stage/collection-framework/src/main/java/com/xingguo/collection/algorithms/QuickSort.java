@@ -3,6 +3,7 @@
  */
 package com.xingguo.collection.algorithms;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
@@ -33,6 +34,8 @@ public class QuickSort<T extends Comparable<T>> implements Sort<T> {
 
     /**
      * 对于快速排序实际就是一个不断递归分区的过程
+     *  pivot元素初始时是当前分区的最高位元素,high为pivot元素前一个位置,low为最低位
+     *  通过low high双指针实现对比交换
      *
      * @param array
      * @param low
@@ -45,13 +48,17 @@ public class QuickSort<T extends Comparable<T>> implements Sort<T> {
             return;
         }
         // 返回分区中间值索引
-        int pivotIndex = partition(array,low,high,flag);
+//        int pivotIndex = partition(array,low,high,flag);
+        // 双指针移动, low和high
+        int pivotIndex = partition2(array,low,high,flag);
+        // 对于左右分区都不会包含中间元素
         // 递归 左侧分区
         sort(array, low, pivotIndex - 1, flag);
         // 递归 右侧分区
         sort(array, pivotIndex + 1, high, flag);
     }
 
+    // 双指针,通过块慢指针均从低位移动, 对于[0,i]区间可以保证的是其中的元素肯定都大于等于或小于等于中间元素
     public int partition(T[] array, int low, int high, boolean flag) {
         // 最高位作为中心点
         T pivot = array[high];
@@ -78,13 +85,40 @@ public class QuickSort<T extends Comparable<T>> implements Sort<T> {
         return i;
     }
 
+    // 采用双指针移动, 低位指针从低往高位移动,高位指针从高位往低位移动
+    public int partition2(T[] array, int low, int high, boolean flag) {
+        // 将最高位设置为pivot元素
+        T pivot = array[high];
+        while (low < high) {
+            if ((flag && array[low].compareTo(pivot) == -1) || (!flag && array[low].compareTo(pivot) == 1)) {
+                low++;
+            } else {
+                // 交换高位和低位元素
+                array[high--] = array[low];
+                // 此时high已经前移一位
+                array[low] = array[high];
+                // 此时high的位置已经出现空闲插槽
+            }
+        }
+        // 将中间元素放入空闲插槽中
+        array[high] = pivot;
+        return high;
+    }
+
     public static void main(String[] args) {
-        Integer[] values = new Integer[]{5, 3, 2, 1};
+        Integer[] values = new Integer[]{3, 7, 8, 5, 2, 1, 5, 4};
         Sort<Integer> integerInsertSort = new QuickSort<>();
         integerInsertSort.sort(values, true);
         Stream.of(values).forEach(System.out::print);
         System.out.println();
         integerInsertSort.sort(values, false);
         Stream.of(values).forEach(System.out::print);
+        System.out.println();
+        Arrays.sort(Arrays.stream(values).mapToInt(Integer::intValue).toArray());
+        int i = 0;
+        while ((i & 1) <= 0) {
+            i++;
+        }
+        System.out.println(i);
     }
 }

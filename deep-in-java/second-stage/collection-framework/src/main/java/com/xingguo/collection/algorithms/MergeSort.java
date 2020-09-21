@@ -36,7 +36,7 @@ public class MergeSort<T extends Comparable<T>> implements Sort<T> {
         if (low >= high) {
             return;
         }
-        int mid = low / 2 + high / 2;
+        int mid = low / 2 + high / 2; // 为了避免 low + high 超过int的范围,因此先执行除法再执行加法
         partition(array, low, mid, flag); // 左区间 包含中间值
         partition(array, mid + 1, high, flag);// 有区间 不包含中间值
         // 对分区进行合并
