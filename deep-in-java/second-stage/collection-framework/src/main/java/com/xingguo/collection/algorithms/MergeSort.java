@@ -3,6 +3,10 @@
  */
 package com.xingguo.collection.algorithms;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
@@ -92,7 +96,7 @@ public class MergeSort<T extends Comparable<T>> implements Sort<T> {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Integer[] values = new Integer[]{5, 3, 2, 1};
         Sort<Integer> integerInsertSort = new MergeSort<>();
         integerInsertSort.sort(values, true);
@@ -100,5 +104,43 @@ public class MergeSort<T extends Comparable<T>> implements Sort<T> {
         System.out.println();
         integerInsertSort.sort(values, false);
         Stream.of(values).forEach(System.out::print);
+        System.out.println();
+        Integer[] integers = new Integer[15];
+        for (int i = 15; i > 0; i--) {
+            integers[15 - i] = i;
+        }
+        // 可以通过 在 vm options 中增加 -Djava.util.Arrays.useLegacyMergeSort=true 来调试 java.util.Arrays.mergeSort(java.lang.Object[], java.lang.Object[], int, int, int)
+        /**
+         * 对于以下代码的分析
+         *         // Merge sorted halves (now in src) into dest
+         *         for(int i = destLow, p = low, q = mid; i < destHigh; i++) {
+         *             if (q >= high || p < mid && ((Comparable)src[p]).compareTo(src[q])<=0)
+         *                 dest[i] = src[p++];
+         *             else
+         *                 dest[i] = src[q++];
+         *         }
+         *  在对分区数据从 [low,high) 进行分区 左区间: [low,mid-1] 右区间:[mid,high)   ;对左右两个分区进行对比
+         *  p为左区间游标,q为右区间游标
+         *  当 q>=high 为 true 表示右区间已全部遍历结束, 且 使用的 || 因此 ,后面 (p < mid && ((Comparable)src[p]).compareTo(src[q])<=0) 都不会执行,直接将左区间剩余的元素放入原数组中( dest[i] = src[p++];)
+         *  当 q >= high 为false ,表示右区间尚未遍历结束, 如果 p < mid 为true 表示为左区间尚未遍历结束,因此此时需要执行 (((Comparable)src[p]).compareTo(src[q])<=0) 元素对比判断
+         *  当 q >= high 为false ,表示右区间尚未遍历结束, 如果 p < mid 为 false 表示为左区间已全部遍历结束, 且由于使用的 && 因此 (((Comparable)src[p]).compareTo(src[q])<=0) 不需要执行,直接将右区间的剩余元素写入到原数组中( dest[i] = src[q++];)
+         *
+         *  当循环结束后 原数组中 [destLow,destHigh) 区间的数据完全都是有序的
+         *
+         */
+        Arrays.sort(integers);
+
+        // 以下代码会抛出以下异常
+        // TODO 异常解决方案?????????
+        // Unable to make private java.util.Arrays() accessible: module java.base does not "opens java.util" to module collection.framework
+//        Integer[] clone = integers.clone();
+//        Class<Arrays> arraysClass = Arrays.class;
+//        Constructor<Arrays> declaredConstructor = arraysClass.getDeclaredConstructor();
+//        declaredConstructor.setAccessible(true);
+//        Arrays arrays = declaredConstructor.newInstance();
+//        // 获取私有静态方法
+//        Method mergeSort = arraysClass.getDeclaredMethod("mergeSort", Object[].class, Object[].class, int.class, int.class, int.class);
+//        mergeSort.setAccessible(true);
+//        mergeSort.invoke(arrays, clone, integers, 0, integers.length, 0);
     }
 }
