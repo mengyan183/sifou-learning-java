@@ -3,5 +3,6 @@
  */
 module concurrent.basic {
     requires java.base;
+    requires java.management;
     exports com.xingguo.concurrent.basic;
 }
