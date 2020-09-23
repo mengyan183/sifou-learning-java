@@ -10,6 +10,7 @@
     <modules>
         <module>first-stage</module>
         <module>second-stage</module>
+        <module>third-stage</module>
     </modules>
     <packaging>pom</packaging>
 
