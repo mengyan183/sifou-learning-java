@@ -37,7 +37,9 @@ public class ProcessInfoDemo {
 
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         System.out.println("当前进程中的存活的线程数量:" + threadMXBean.getThreadCount());
-
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+        System.out.println("堆区信息:" + memoryMXBean.getHeapMemoryUsage().toString());
+        System.out.println("非堆区信息:" + memoryMXBean.getNonHeapMemoryUsage().toString());
         ManagementFactory.getMemoryManagerMXBeans().forEach(memoryManagerMXBean -> {
             System.out.println("内存相关信息:当前内存区域名称:" + memoryManagerMXBean.getName());
             Stream.of(memoryManagerMXBean.getMemoryPoolNames()).forEach(System.out::println);
