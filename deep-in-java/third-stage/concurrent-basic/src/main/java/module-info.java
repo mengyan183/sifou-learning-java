@@ -4,5 +4,10 @@
 module concurrent.basic {
     requires java.base;
     requires java.management;
+    requires java.logging;
+    requires org.mapstruct.processor;
+    requires org.slf4j;
+    requires org.slf4j.simple;
+    requires static lombok;
     exports com.xingguo.concurrent.basic;
 }
