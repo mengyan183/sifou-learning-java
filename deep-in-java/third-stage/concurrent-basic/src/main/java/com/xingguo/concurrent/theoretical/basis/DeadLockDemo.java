@@ -5,6 +5,8 @@ package com.xingguo.concurrent.theoretical.basis;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +20,11 @@ import java.util.logging.Logger;
 @Slf4j
 public class DeadLockDemo {
     public static void main(String[] args) {
+
+    }
+
+
+    public static void syncDeadLock(){
         Object l1 = new Object();
         Object l2 = new Object();
         new Thread(() -> {
