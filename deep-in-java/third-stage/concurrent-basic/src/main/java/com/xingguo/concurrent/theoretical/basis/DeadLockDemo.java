@@ -6,6 +6,7 @@ package com.xingguo.concurrent.theoretical.basis;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 @Slf4j
 public class DeadLockDemo {
     public static void main(String[] args) {
-
+        syncDeadLock();
     }
 
 
@@ -30,18 +31,21 @@ public class DeadLockDemo {
         new Thread(() -> {
             synchronized (l1) {
                 log.info("当前线程:{}持l1共享变量", Thread.currentThread().getId());
-                try {
-                    log.info("当前线程:{}准备休眠释放l1共享变量", Thread.currentThread().getId());
-                    /**
-                     * 在其注解中可以看到
-                     * The thread does not lose ownership of any monitors.
-                     * 对于sync 实际是利用的monitor ,因此当当前线程休眠时,并不会释放l1的所有权,因此另外一个线程还是被阻塞
-                     */
-                    Thread.sleep(10000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //TODO : 当前线程并没有释放,因此就没有重新获取一说
+                log.info("当前线程:{}准备休眠释放l1共享变量", Thread.currentThread().getId());
+//                try {
+//                    /**
+//                     * 在其注解中可以看到
+//                     * The thread does not lose ownership of any monitors.
+//                     * 对于sync 实际是利用的monitor ,因此当当前线程休眠时,并不会释放l1的所有权,因此另外一个线程还是被阻塞
+//                     */
+//                    Thread.sleep(10000L);
+//
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                //TODO 为什么没有释放当前持有的锁
+//                LockSupport.parkNanos(1000000L);
+                Thread.yield();
                 log.info("当前线程:{}休眠结束重新持有l1共享变量", Thread.currentThread().getId());
                 synchronized (l2){
                     log.info("当前线程:{}持l2共享变量", Thread.currentThread().getId());
