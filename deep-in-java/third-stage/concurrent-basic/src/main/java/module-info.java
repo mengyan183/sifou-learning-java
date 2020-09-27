@@ -10,5 +10,6 @@ module concurrent.basic {
     requires org.slf4j.simple;
     requires static lombok;
     requires jdk.unsupported;
+    requires com.google.common;
     exports com.xingguo.concurrent.basic;
 }
