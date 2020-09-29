@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * CopyOnWriteDemo
@@ -39,5 +40,12 @@ public class CopyOnWriteDemo {
 //            iterator.remove(); // 对于当前iterator并没有实现remove方法,会抛出unsupport异常信息
             integers.add(next);
         }
+
+        // 对于支持并发操作获取size是获取的当前数组的实际长度
+        // 而对于线程不安全的arrayList等,实际是直接获取的冗余字段length,对于length字段而言,实际并不能保证并发情况下的数据一致性,因此对于size方法实际只是获取的一个近似数据,并非一个绝对正确的结果
+        log.info("{}",integers.size());
+
+        CopyOnWriteArraySet<Integer> integers1 = new CopyOnWriteArraySet<>();
+        integers1.size();
     }
 }
