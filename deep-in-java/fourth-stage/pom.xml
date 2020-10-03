@@ -3,20 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>third-stage</artifactId>
+        <artifactId>deep-in-java</artifactId>
         <groupId>com.xingguo</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <description>java并发基础</description>
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>28.1-jre</version>
-        </dependency>
-    </dependencies>
-    <artifactId>concurrent-basic</artifactId>
 
+    <artifactId>fourth-stage</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>concurrent-principle</module>
+    </modules>
 
 </project>
