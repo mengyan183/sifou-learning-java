@@ -18,7 +18,10 @@ public class SimilarPthreadDemo {
         // 创建线程对象
         Thread thread = new Thread(SimilarPthreadDemo::helloWorld);
         // 创建和os映射的线程
+        //[Thread-0] INFO com.xingguo.concurrent.principle.SimilarPthreadDemo - 线程id:22;helloWorld
         thread.start();
+        //[main] INFO com.xingguo.concurrent.principle.SimilarPthreadDemo - 线程id:1;helloWorld
+//        thread.run();
         // 等待线程执行结束
         thread.join();
     }
