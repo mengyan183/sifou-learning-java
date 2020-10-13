@@ -12,8 +12,4 @@
     <artifactId>concurrent-principle</artifactId>
     <packaging>jar</packaging>
     <description>并发原理</description>
-
-    <description>
-
-    </description>
 </project>
