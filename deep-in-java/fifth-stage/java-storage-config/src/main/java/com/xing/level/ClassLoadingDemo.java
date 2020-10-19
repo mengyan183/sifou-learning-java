@@ -27,8 +27,9 @@ public class ClassLoadingDemo {
         // 对于 User.class 当前操作实际也会将User进行加载, 因此替换为 手动路径
         String classReferenceName = "com.xing.level.User";
         log.info("{}", classReferenceName);
-//        loadClassBeforeParent(classPath, classReferenceName);
-        loadClassAfterParent(classPath, classReferenceName);
+        loadClassBeforeParent(classPath, classReferenceName);
+//        loadClassAfterParent(classPath, classReferenceName);
+
     }
 
     /**
@@ -60,8 +61,9 @@ public class ClassLoadingDemo {
      */
     private static void loadClassBeforeParent(String classPath, String classReferenceName) throws ClassNotFoundException {
         MyClassLoader myClassLoader = new MyClassLoader();
+        Class<?> aClass2 = myClassLoader.loadClass(classReferenceName);
         Class<?> defineClass = myClassLoader.defineClass(classReferenceName, new File(classPath.concat(classReferenceName.replaceAll("\\.", "/").concat(".class"))));
-        log.info("{}", defineClass);
+        log.info("{}'s classLoader :{}; aClass2 == defineClass :{}", defineClass, defineClass.getClassLoader(), aClass2 == defineClass);
         Stream.of(defineClass.getDeclaredFields()).forEach(field -> {
             log.info("字段:{}", field);
         });
@@ -69,6 +71,7 @@ public class ClassLoadingDemo {
         // 获取线程上下文的classLoader
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Class<?> aClass = contextClassLoader.loadClass(classReferenceName);
+        log.info("{}", aClass == aClass2);
         /**
          * 对于 myClassLoader 是将当前线程的classLoader作为parent
          * 对于相同的class由于是使用用的不同的ClassLoader进行加载,因此就会存在 User.class != User.class的情况

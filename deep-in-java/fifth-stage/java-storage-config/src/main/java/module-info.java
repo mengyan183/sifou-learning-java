@@ -7,4 +7,5 @@ module java.storage.config {
     requires org.slf4j.simple;
     requires static lombok;
     requires org.apache.commons.io;
+    requires spring.core;
 }
