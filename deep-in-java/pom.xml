@@ -12,6 +12,7 @@
         <module>second-stage</module>
         <module>third-stage</module>
         <module>fourth-stage</module>
+        <module>fifth-stage</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,6 +32,11 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>1.2.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -41,6 +47,19 @@
                 <configuration>
                     <target>15</target>
                     <source>15</source>
+                    <!--fix maven clean install bug jdk15 lombok @Slf4j log cannot find symbol-->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.12</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.2.0.Final</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
