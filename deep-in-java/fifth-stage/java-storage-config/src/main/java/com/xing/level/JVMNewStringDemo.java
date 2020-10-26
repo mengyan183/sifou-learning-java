@@ -3,6 +3,8 @@
  */
 package com.xing.level;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * JVMNewStringDemo
  * 关键字 new 的内存分配逻辑
@@ -12,13 +14,32 @@ package com.xing.level;
  * @date 2020/10/20 8:20 PM
  * @since
  */
+@Slf4j
 public class JVMNewStringDemo {
     public final static String STRING = "FINAL_STRING";
 
 
     public static void main(String[] args) {
+        sameString();
+        equalString();
 
+    }
 
+    public static void equalString() {
+        String a = "length: 10";
+        String b = "length: " + a.length(); // 对于 a.length 由于是一个运算结果值,属于运行时数据,因此对于 b 而言需要在运行时才能得到具体执行的地址
+        // 且对于 编译后的class由于做了字节码提升,因此 = new StringBuilder("length: ").append(a.length()).toString();因此对于b是指向的heap中的对象实例
+        log.info("{}", a == b);
+    }
+
+    public static void sameString() {
+        char[] array = new char[]{'h', 'e', 'l', 'l', 'o'};
+        String hello = "hello";
+        String s = new String(array);
+        String intern = s.intern();
+        log.info("{}", System.identityHashCode(hello));
+        log.info("{}", System.identityHashCode(s));
+        log.info("{}", System.identityHashCode(intern));
     }
 
     public static void newObject() {

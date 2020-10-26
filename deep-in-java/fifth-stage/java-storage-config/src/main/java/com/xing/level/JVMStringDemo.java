@@ -50,7 +50,7 @@ public class JVMStringDemo {
         // 对于 c.intern 中,
         // 首先会执行lookup_shared 来查找堆中-constant pool中是否存在该字符串,如果存在,则会直接返回constant pool 中的内存地址;
         // 反之,则会do_lookup查找当前线程的栈中是否存在当前字符串数据,如果存在则会栈中的地址;
-        // 反之,则会在当前线程栈中创建新的字符串数据,并返回新生成的地址
+        // 反之,则会在constant pool 中生成新的字符串常量,并返回常量池中的地址
         String a = "a";
         String b = "b";
         String c = a + b;

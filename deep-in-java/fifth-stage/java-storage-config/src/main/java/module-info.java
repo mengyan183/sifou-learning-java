@@ -8,4 +8,5 @@ module java.storage.config {
     requires static lombok;
     requires org.apache.commons.io;
     requires spring.core;
+    requires java.management;
 }
