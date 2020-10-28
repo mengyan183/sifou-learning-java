@@ -13,6 +13,7 @@
         <module>third-stage</module>
         <module>fourth-stage</module>
         <module>fifth-stage</module>
+        <module>sixth-stage</module>
     </modules>
     <packaging>pom</packaging>
 

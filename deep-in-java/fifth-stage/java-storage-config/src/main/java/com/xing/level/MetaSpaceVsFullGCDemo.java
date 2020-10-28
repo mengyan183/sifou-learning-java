@@ -23,7 +23,7 @@ public class MetaSpaceVsFullGCDemo {
         String[] strings = new String[length];
 //        test();
         int i = 0;
-        //-Xmx5m -XX:MaxMetaspaceSize=10m -Xlog:gc+metaspace*
+        //-Xmx10m -XX:MaxMetaspaceSize=10m -Xlog:gc+metaspace*
         while (true) {
             String intern = UUID.randomUUID().toString().intern();
             strings[i % length] = intern;
