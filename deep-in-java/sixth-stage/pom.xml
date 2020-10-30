@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>gc-optimization</module>
+        <module>last-jvm-opt</module>
     </modules>
 
 

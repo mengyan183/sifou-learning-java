@@ -26,8 +26,8 @@ public class OOMDemo {
      */
     public static void main(String[] args) {
 //        oomJavaHeapSpace();
-//        oomGCOverHead();
-        oomUnableCreateNewNativeThread();
+        oomGCOverHead();
+//        oomUnableCreateNewNativeThread();
     }
 
     /**
