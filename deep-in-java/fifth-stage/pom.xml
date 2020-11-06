@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>java-storage-config</module>
+        <module>reflection-low-jdk</module>
     </modules>
 
 
