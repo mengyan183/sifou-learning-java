@@ -4,12 +4,11 @@
 package com.xingguo;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * SlidingWindowSimpleDemo
@@ -27,6 +26,8 @@ public class SlidingWindowSimpleDemo {
         SlidingWindowSimpleDemo slidingWindowSimpleDemo = new SlidingWindowSimpleDemo();
         AtomicInteger atomicInteger = new AtomicInteger();
         ExecutorService executorService = Executors.newFixedThreadPool(2);
+        AtomicInteger integer = new AtomicInteger();
+
         executorService.execute(() -> {
             Random random = new Random();
             while (true) {
@@ -34,7 +35,8 @@ public class SlidingWindowSimpleDemo {
                 int i = atomicInteger.incrementAndGet();
                 System.out.println(i);
                 try {
-                    Thread.sleep(random.nextInt(1000 * 60));
+                    Thread.sleep(integer.incrementAndGet() * 1000);
+                    integer.compareAndSet(30, 0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -42,9 +44,12 @@ public class SlidingWindowSimpleDemo {
         });
         executorService.execute(() -> {
             while (true) {
-                if ((new Date().getTime() - time) % (1000 * 30) == 0) {
-                    System.out.println("当前时间 :" + new Date() + ";30秒内登陆次数为:" + slidingWindowSimpleDemo.total);
+                try {
+                    Thread.sleep(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                System.out.println("当前时间 :" + new Date() + ";30秒内登陆次数为:" + slidingWindowSimpleDemo.total);
             }
         });
         executorService.shutdown();
@@ -59,6 +64,7 @@ public class SlidingWindowSimpleDemo {
     int lastIndex = -1;
 
     public void saveCount(Date date) {
+        System.out.println("当前时间" + date + "登录");
         if (startTime == null) {
             synchronized (this) {
                 if (startTime == null) {
@@ -85,13 +91,16 @@ public class SlidingWindowSimpleDemo {
             // 由于当前时间跨度超过了周期起始时间内的限定跨度,因此判定为当前已进入下一个周期
             if (betweenMinute > firstCycleLeftTime) {
                 isFirstCycle = false;
-                System.out.println("周期开始时间:" + startTime + ";进入下一个周期");
+                System.out.println("周期开始时间:" + startTime + ";当前时间" + date + "进入下一个周期");
+                System.out.println(Arrays.stream(countArray).mapToObj(Objects::toString).collect(Collectors.joining(",")));
             }
         }
         /**
          * TODO: 当重复使用相同的数组时 存在历史数据清除的问题
          */
         if (!isFirstCycle) {
+            System.out.println("lastIndex:" + lastIndex + ";index:" + index);
+            System.out.println(Arrays.stream(countArray).mapToObj(Objects::toString).collect(Collectors.joining(",")));
             //TODO : 由于当前的区块跨度为1秒,如果每秒内存在多次请求,唯一的解决方法就是对每个区块的跨度再次缩小
             int pre = 0;
             // 需要清除中间区域的数据
@@ -99,6 +108,7 @@ public class SlidingWindowSimpleDemo {
                 pre += countArray[i];
                 countArray[i] = 0;
             }
+            System.out.println(Arrays.stream(countArray).mapToObj(Objects::toString).collect(Collectors.joining(",")));
             total -= pre;
         }
         countArray[index] += 1;

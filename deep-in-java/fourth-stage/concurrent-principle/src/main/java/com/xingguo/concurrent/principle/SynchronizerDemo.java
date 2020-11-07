@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Beijing Jinhaiqunying, Co,. Ltd. All Rights Reserved
+ * Copyright (c) 2020, guoxing, Co,. Ltd. All Rights Reserved
  */
 package com.xingguo.concurrent.principle;
 
