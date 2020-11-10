@@ -14,6 +14,7 @@
         <module>fourth-stage</module>
         <module>fifth-stage</module>
         <module>sixth-stage</module>
+        <module>seventh-stage</module>
     </modules>
     <packaging>pom</packaging>
 

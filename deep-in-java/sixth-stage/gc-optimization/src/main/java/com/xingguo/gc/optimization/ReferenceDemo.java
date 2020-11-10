@@ -92,5 +92,10 @@ public class ReferenceDemo {
         log.info("{}:{}", integerSoftReference, integerSoftReference.get());
         Reference<? extends Integer> poll = integerReferenceQueue.poll();
         log.info("ReferenceQueue:{};value:{}", poll, Objects.nonNull(poll) ? poll.get() : null);
+
+        Integer a = Integer.valueOf(0);
+        Integer b = a;
+        a = null;
+        assert b == null;
     }
 }
