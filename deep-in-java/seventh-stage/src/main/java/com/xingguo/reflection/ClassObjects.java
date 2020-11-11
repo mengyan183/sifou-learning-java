@@ -73,6 +73,16 @@ public class ClassObjects {
         // 对于当前数据会存在于constant pool 中
         long data = 1000L;
     }
+
+    /**
+     * 对于当前CustomOverride注解而言
+     * 在其内部存在 自定义的属性方法 String name() default "custom" ,对于当前属性方法解析可以得到, 当前属性类型要求为java.lang.String ,属性名为 name , default 的含义在于如果在使用当前注解时不指定属性的值,则会使用默认值
+     */
+//    @CustomOverride(name = "test")
+    @CustomOverride("test") // 如果属性名为value,且只设置一个属性值时,则可以不指定属性名称,内置的行为默认支持会将当前值设置给value
+    public void useCustomOverride(){
+
+    }
 }
 
 /**
@@ -93,6 +103,16 @@ enum Color {
     RED,
     YELLOW,
     GREEN;
+
+    /**
+     * 对于java.lang.Enum中的compareTo方法,其核心是利用了java.lang.Enum#ordinal,对于不同版本的相同枚举类,对于相同名称的常量定义,可能由于相对位置发生变化,则compareTo 不会返回0
+     * 对于该修改后枚举可以看到对于 YELLOW/GREEN 字段相较于上面的Color 枚举其ordinal发生了变化
+     * 对于该情况一般容易发生在不同的工程依赖了不同版本的jar
+     * enum Color{
+     *     YELLOW,
+     *     GREEN;
+     * }
+     */
 }
 
 /**
@@ -116,6 +136,9 @@ enum Color {
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @interface CustomOverride {
+    // 属性或行为
+    String name() default "custom";
+    String value();
 }
 
 /**
