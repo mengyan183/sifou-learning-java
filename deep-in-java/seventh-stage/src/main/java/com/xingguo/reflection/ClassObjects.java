@@ -51,6 +51,8 @@ public class ClassObjects {
         String str = new String(c);
         String abc = "abc"; // 对于当前对象实际是jvm将当前字符串转换为char数组并赋值给value字段
         char[] chars = abc.toCharArray();
+        //
+        DefaultClass defaultClass = new DefaultClass();
     }
 
     /**
