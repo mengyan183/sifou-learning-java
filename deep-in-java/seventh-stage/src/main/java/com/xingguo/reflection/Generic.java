@@ -5,12 +5,14 @@ package com.xingguo.reflection;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Generic
@@ -69,10 +71,16 @@ public class Generic<E> {
          */
         String typeName = CustomStringList.class.getGenericSuperclass().getTypeName();
         log.info("{}", typeName);// java.util.ArrayList<java.lang.String>
+        // 对于 getTypeParameters 一般用于指定泛型参数的具体类型后 来获取
+        Stream.of(CustomGenericParam.class.getTypeParameters()).forEach(System.out::println);
     }
 }
 
 // 当对一个类执行具体化泛型时
 class CustomStringList extends ArrayList<String> {
+
+}
+
+class CustomGenericParam<T extends Object> {
 
 }
