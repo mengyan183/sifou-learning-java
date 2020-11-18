@@ -79,7 +79,7 @@ public class GenericDemo {
                     ).forEach(c -> {
                 // 解析当前类的接口中的泛型字段的具体类型
                 Arrays.stream(c.getGenericInterfaces())
-                        .filter(type -> type instanceof ParameterizedType) // 过滤当前接口类型为执行泛型的接口
+                        .filter(type -> type instanceof ParameterizedType) // 过滤当前接口类型为执行泛型的接口 , 对于UserRepositoryImpl实现的三个接口类型可参考一下相关解释
                         .map(type -> (ParameterizedType) type) // 将当前类型转换为ParameterizedType
                         .forEach(parameterizedType -> {
                             if (UserRepository.class.equals(parameterizedType.getRawType())) {
@@ -118,9 +118,10 @@ interface UserRepository<T> {
  * 实际执行
  */
 @Repository(tableName = "user")
-class UserRepositoryImpl implements UserRepository<User>,
-        Comparable<UserRepositoryImpl>,
-        Serializable {
+class UserRepositoryImpl implements UserRepository<User>,// 对于当前接口的类型实际属于 ParameterizedType 继承至Type ,对于java.lang.reflect.ParameterizedType.getActualTypeArguments 实际就是 UserRepository<User> 中的 "<>"中的User类型
+        Comparable<UserRepositoryImpl>,//和UserRepository<User>类型一样都是ParameterizedType
+        Serializable // 对于当前类型而言,其为 Class类型
+{
     @Override
     public int compareTo(UserRepositoryImpl o) {
         return 0;
