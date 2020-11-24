@@ -49,6 +49,6 @@ public class PersonCustomizationDemo {
             log.info("person.age:{}", person.getAge());
         }
         // TODO : java.beans.PropertyEditorManager 的用途
-        
+
     }
 }

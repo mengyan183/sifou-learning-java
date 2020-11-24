@@ -4,6 +4,7 @@
 package com.xingguo.java.beans.properties;
 
 import java.beans.*;
+import java.io.Serializable;
 
 /**
  * Person
@@ -12,16 +13,21 @@ import java.beans.*;
  * @date 2020/11/24 11:28 AM
  * @since
  */
-public class Person {
+public class Person implements Serializable {
     private String name;
 
     private int age;
 
+    /**
+     * javabeans - persistence
+     * 首先要求实现 java.io.Serializable
+     * 对于 不需要持久化的属性 要求 使用 "transient" 关键字保证其不会被持久化
+     */
     // 设置当前Bean的属性变化支持工具
     // 强制属性更新
-    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     // 勉强属性更新
-    private final VetoableChangeSupport vetoableChangeSupport = new VetoableChangeSupport(this);
+    private final transient VetoableChangeSupport vetoableChangeSupport = new VetoableChangeSupport(this);
 
     public String getName() {
         return name;
