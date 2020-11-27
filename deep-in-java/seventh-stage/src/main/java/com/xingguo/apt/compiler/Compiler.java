@@ -3,13 +3,18 @@
  */
 package com.xingguo.apt.compiler;
 
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Compiler
@@ -44,21 +49,27 @@ public class Compiler {
      * 根据 sourcePath 和 指定的className 来查找当前指定的java文件,
      * 并将其编译输出到指定的目录下
      *
-     * @param className 全路径类名
+     * @param classNames 多个全路径类名
      * @throws IOException 异常信息
      */
-    public void compiler(String className) throws IOException {
-        if (StringUtils.isEmpty(className)) {
+    public void compiler(String... classNames) throws IOException {
+        if (CollectionUtils.isEmpty(Arrays.asList(classNames))) {
             return;
         }
-        String javaFileName = className.replace('.', File.separatorChar).concat(".java");
-        // 查找当前java文件
-        File file = new File(sourcePth, javaFileName);
-        Iterable<? extends JavaFileObject> javaFileObjects = standardJavaFileManager.getJavaFileObjects(file);
+
+        Iterable<? extends JavaFileObject> javaFileObjects = standardJavaFileManager.getJavaFileObjects(Stream.of(classNames)
+                .filter(className -> !StringUtils.isEmpty(className))
+                .map(className -> {
+                    String javaFileName = className.replace('.', File.separatorChar).concat(".java");
+                    // 查找当前java文件
+                    return new File(sourcePth, javaFileName);
+                }).toArray(File[]::new));
         // 设置编译后的class输出目录
         standardJavaFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singleton(targetClassPath));
         // 创建编译任务
         JavaCompiler.CompilationTask task = javaCompiler.getTask(new OutputStreamWriter(System.out), standardJavaFileManager, null, null, null, javaFileObjects);
+        // 手动指定 processor
+//        task.setProcessors();
         // 执行任务
         task.call();
     }
