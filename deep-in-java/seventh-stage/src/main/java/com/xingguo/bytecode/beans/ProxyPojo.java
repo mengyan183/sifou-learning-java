@@ -5,7 +5,6 @@ package com.xingguo.bytecode.beans;
 
 import com.xingguo.bytecode.dynamicproxy.NameableProxyService;
 
-import java.beans.PropertyVetoException;
 import java.io.Serializable;
 
 /**
@@ -27,5 +26,12 @@ public class ProxyPojo implements Serializable, NameableProxyService {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "ProxyPojo{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
