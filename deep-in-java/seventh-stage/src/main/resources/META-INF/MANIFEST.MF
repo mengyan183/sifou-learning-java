@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Implementation-Title: xingguo
+Automatic-Module-Name: xingguo
+Implementation-Version: 1.0.0
