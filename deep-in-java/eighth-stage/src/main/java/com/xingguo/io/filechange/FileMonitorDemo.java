@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 
 /**
  * FileMonitorDemo
- * 对于当前文件监听操作实际就是通过
- *
+ * 对于当前文件监听操作实际就是通过判断指定文件的`{@link File#lastModified()}来判断指定文件是否发生变更
  *
  * @author guoxing
  * @date 2020/12/6 3:42 PM
@@ -62,6 +61,7 @@ public class FileMonitorDemo {
                 System.out.printf("elder:%s;last:%s\n", elderLastModified, lastModified);
                 fileChangePublisher.publish(file);
             }
+            // 新增/修改最新文件变更时间
             fileLastModifiedCache.put(file, lastModified);
         }, 0, 5, TimeUnit.SECONDS);
 
