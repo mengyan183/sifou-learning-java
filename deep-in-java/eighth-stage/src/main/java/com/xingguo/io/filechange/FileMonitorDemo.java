@@ -54,6 +54,7 @@ public class FileMonitorDemo {
         Objects.requireNonNull(file);
         // 通过定时线程去探测文件变化,并不能保证及时性
         executorService.scheduleAtFixedRate(() -> {
+            // 在本地系统文件可能会不存在
             Long elderLastModified = fileLastModifiedCache.get(file);
             long lastModified = file.lastModified();
             // 如果文件最终修改时间发生变化,说明文件发生修改,则发布文件变更通知
