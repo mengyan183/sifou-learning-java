@@ -44,7 +44,7 @@ public class DirectoryOperateDemo {
      * @date 2020-12-09 5:42 PM
      * @since 1.0.0
      */
-    private static String getCurrentJavaLocation() {
+    public static String getCurrentJavaLocation() {
         Class<DirectoryOperateDemo> directoryOperateDemoClass = DirectoryOperateDemo.class;
         String path = directoryOperateDemoClass.getResource("/").getPath();
         String projectPath = path.replace("/target/classes", "/src/main/java");
