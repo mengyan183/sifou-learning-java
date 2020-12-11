@@ -38,8 +38,8 @@ public class ByteChannelDemo {
     private static void createAndWrite() {
         try (
                 ByteChannel source = Files.newByteChannel(Paths.get(USER_DIR, "README.md"));
-                // 对于创建文件和写入数据需要增加 操作参数  每次都创建新的文件以及数据写入
-                ByteChannel target = Files.newByteChannel(Paths.get(USER_DIR, "COPY-README.md"), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+                // 对于创建文件和写入数据需要增加 操作参数  每次都创建新的文件以及数据写入 , 关闭时删除
+                ByteChannel target = Files.newByteChannel(Paths.get(USER_DIR, "COPY-README.md"), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE, StandardOpenOption.DELETE_ON_CLOSE);
         ) {
             // 对于当前容量可以尽可能大一些,减少文件读取次数
             ByteBuffer byteBuffer = ByteBuffer.allocate(64);
@@ -47,10 +47,8 @@ public class ByteChannelDemo {
                 byteBuffer.rewind();
                 //TODO 当前操作也会存在乱码的问题
                 target.write(byteBuffer);
-                byteBuffer.flip();
+                byteBuffer.clear();
             }
-            // 删除文件
-            Files.deleteIfExists(Paths.get(USER_DIR, "COPY-README.md"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -107,8 +105,9 @@ public class ByteChannelDemo {
                  * 对于{@link Buffer#flip()}和{@link Buffer#clear()} 的唯一区别在于 对于{@link Buffer#limit}字段的操作
                  * 对于 {@link Buffer#flip()} 操作的好处在于记录了上次读取的最长长度,同时也限制了下一次写入的长度
                  */
-                byteBuffer.flip();
-//                byteBuffer.clear();
+//                byteBuffer.flip();
+                // 由于下一次是写入操作,因此不需要 flip操作,对于下一次写入支持将byte数组的数据全部覆盖
+                byteBuffer.clear();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
