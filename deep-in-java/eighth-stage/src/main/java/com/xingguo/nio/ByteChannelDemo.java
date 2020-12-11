@@ -99,7 +99,7 @@ public class ByteChannelDemo {
                 System.out.print(charBuffer);
                 /**
                  * 由于读取操作导致 {@link ByteBuffer#position} 数据发生变化,
-                 * 对于{@link ByteBuffer#limit} 字段实际是通过记录上一次的数据读取的长度
+                 * 对于{@link ByteBuffer#limit} 字段实际是通过记录上一次的数据读取的长度,limit 的另一个作用是避免读取到错误的数据,限制读取长度; limit 限制的是实际可用容量
                  *
                  * flip 翻转
                  * {@link ByteBuffer#flip()} 首先将上一次读取的数据长度{@link ByteBuffer#position}赋值给{@link ByteBuffer#limit},并将 {@link ByteBuffer#position}重置为0 ,以及{@link ByteBuffer#mark}重置为-1
