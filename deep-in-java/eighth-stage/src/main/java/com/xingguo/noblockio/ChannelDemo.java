@@ -3,10 +3,7 @@
  */
 package com.xingguo.noblockio;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -16,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 /**
  * ChannelDemo
  * 对比 io中的 {@link java.io.InputStream,java.io.OutputStream} 和 new io 中的 {@link java.nio.channels.Channel,java.nio.channels.ReadableByteChannel,java.nio.channels.WritableByteChannel}
+ *
+ * 模拟 commons-io 中的{@link org.apache.commons.io.IOUtils#copy(InputStream, OutputStream)}
  *
  * @author guoxing
  * @date 2020/12/11 3:57 PM
@@ -43,7 +42,7 @@ public class ChannelDemo {
     private static void channelCopy() throws IOException {
         ReadableByteChannel readableByteChannel = Channels.newChannel(System.in);
         WritableByteChannel writableByteChannel = Channels.newChannel(System.out);
-        ByteBuffer allocate = ByteBuffer.allocate(8);
+        ByteBuffer allocate = ByteBuffer.allocate(4 * 1024);
         while (readableByteChannel.isOpen() && readableByteChannel.read(allocate) > 0) {
             if (new String(allocate.array(), 0, allocate.position(), StandardCharsets.UTF_8).startsWith("exit" + lineSeparator)) {
                 readableByteChannel.close();
@@ -77,7 +76,7 @@ public class ChannelDemo {
          */
         PrintStream out = System.out;
         // 使用byte 数组作为数据传输介质
-        byte[] bytes = new byte[8];
+        byte[] bytes = new byte[4 * 1024];
 /*        // 将inputStream中的数据写入到字节数组中
         while (in.read(bytes) != -1) {
             String s = new String(bytes, StandardCharsets.UTF_8);
