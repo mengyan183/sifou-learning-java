@@ -143,7 +143,7 @@ public class SelectorServerDemo {
                             /**
                              * selector 提供的功能实际 就是 server 复用,
                              * 对于 原始的 serverSocket 和 socket(client) , 连接关系实际为 server <-> client
-                             * 当 使用{@link ServerSocketChannel#register(Selector, int)} 时, 连接关系就变成了  server <-> sequence of {@link java.nio.channels.SelectableChannel} ; {@link java.nio.channels.SelectableChannel} <-> client ; 连接关系变为了 1(server) : n(selectableChannel) : n(client)
+                             * 当 使用{@link ServerSocketChannel#register(Selector, int)} 时, 连接关系就变成了  servers <-> sequence of {@link java.nio.channels.SelectableChannel} ; {@link java.nio.channels.SelectableChannel} <-> client ; 连接关系变为了 n(server) : n(selectableChannel) : n(client)
                              */
                             //TODO warning 关闭正确的连接
                             accept.close();

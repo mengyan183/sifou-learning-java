@@ -1,0 +1,5 @@
+#当前文件中也可以不存在任何内容
+#要求当前concrete class 必须和当前文件名称所对应的类 存在层级关系,否则运行时会抛出错误
+#且要求实现类中必须存在一个公共的无参构造函数
+com.xingguo.spi.Cat
+com.xingguo.spi.Human
